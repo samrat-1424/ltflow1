@@ -14,7 +14,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     })->name('dashboard'); 
 
     Route::resource('blogs', AdminBlogController::class);
-});
+}); 
 
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
