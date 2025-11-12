@@ -1,33 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Blog Management</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde/dist/simplemde.min.css">
-    <style>
-        body { font-family: Arial; margin: 0; padding: 0; background: #f6f6f6; }
-        .sidebar { width: 200px; background: #2c3e50; height: 100vh; position: fixed; color: white; padding: 20px; }
-        .sidebar a { display: block; color: white; padding: 10px 0; text-decoration: none; }
-        .sidebar a:hover { background: #34495e; }
-        .content { margin-left: 220px; padding: 20px; }
-        .header { background: #ecf0f1; padding: 10px; margin-bottom: 20px; }
-        
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    @stack('styles')
 </head>
-<body>
-    <div class="sidebar">
-        <h3>Admin Panel</h3>
-        <a href="{{ route('admin.dashboard') }}">Dashboard</a>
-        <a href="{{ route('admin.blogs.index') }}">Blogs</a>
+<body class="bg-light">
+    <div class="d-flex min-vh-100">
+        <nav class="bg-dark text-white p-4" style="width: 240px;">
+            <div class="mb-4">
+                <h4 class="mb-0">Admin Panel</h4>
+                <p class="text-white-50 small mb-0">LT Flow</p>
+            </div>
+            <ul class="nav nav-pills flex-column gap-2">
+                <li class="nav-item">
+                    <a class="nav-link text-white {{ request()->routeIs('admin.dashboard') ? 'active bg-primary' : '' }}" href="{{ route('admin.dashboard') }}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white {{ request()->routeIs('admin.blogs.*') ? 'active bg-primary' : '' }}" href="{{ route('admin.blogs.index') }}">Blogs</a>
+                </li>
+                <li class="nav-item mt-4">
+                    <form method="POST" action="{{ route('admin.logout') }}">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-light w-100">Sign out</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="flex-grow-1 p-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-1">@yield('title')</h1>
+                    <p class="text-muted small mb-0">@yield('subtitle')</p>
+                </div>
+            </div>
+
+            @if (session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
+            @yield('content')
+        </main>
     </div>
 
-    <div class="content">
-        <div class="header">
-            <h2>@yield('title')</h2>
-        </div>
-
-        @yield('content')
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     @stack('scripts')
 </body>
 </html>
